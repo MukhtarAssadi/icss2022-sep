@@ -44,10 +44,10 @@ ASSIGNMENT_OPERATOR: ':=';
 stylesheet: (statement)*;
 statement: stylerule | variable_assignment;
 
-color: 'color:' optelling;
-background_color: 'background-color:' optelling;
-width: 'width:' optelling;
-height: 'height:' optelling;
+color: 'color:' expressie;
+background_color: 'background-color:' expressie;
+width: 'width:' expressie;
+height: 'height:' expressie;
 
 stylerule: (LOWER_IDENT | ID_IDENT | CLASS_IDENT)
 OPEN_BRACE
@@ -55,13 +55,13 @@ OPEN_BRACE
 CLOSE_BRACE;
 
 property: color | background_color | width | height;
-variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR optelling SEMICOLON;
+variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expressie SEMICOLON;
 
 
 
-optelling: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
+expressie: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
 
 vermenigvuldiging: element (MUL element)*;
 
-element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' optelling ')';
+element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expressie ')';
 
