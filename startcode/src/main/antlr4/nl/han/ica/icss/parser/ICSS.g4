@@ -41,9 +41,31 @@ MIN: '-';
 MUL: '*';
 ASSIGNMENT_OPERATOR: ':=';
 
-
-
+variable_value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE;
 
 //--- PARSER: ---
-stylesheet: EOF;
+stylesheet: (statement)*;
+statement: stylerule | variable_assignment;
+
+color: 'color:' (COLOR | CAPITAL_IDENT);
+background_color: 'background-color:' (COLOR | CAPITAL_IDENT);
+width: 'width:' ((PIXELSIZE | PERCENTAGE) | CAPITAL_IDENT);
+height: 'height:' ((PIXELSIZE | PERCENTAGE) | CAPITAL_IDENT);
+
+stylerule: (LOWER_IDENT | ID_IDENT | CLASS_IDENT)
+OPEN_BRACE
+(property SEMICOLON)+
+CLOSE_BRACE
+SEMICOLON;
+
+property: color | background_color | width | height;
+variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR optelling SEMICOLON;
+
+
+
+optelling: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
+
+vermenigvuldiging: element (MUL element)*;
+
+element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | '(' optelling ')';
 
