@@ -44,24 +44,36 @@ ASSIGNMENT_OPERATOR: ':=';
 stylesheet: (statement)*;
 statement: stylerule | variable_assignment;
 
+stylerule:
+(LOWER_IDENT | ID_IDENT | CLASS_IDENT)
+OPEN_BRACE
+    (property SEMICOLON | if_statement)*
+CLOSE_BRACE;
+
+variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expressie SEMICOLON;
+
 color: 'color:' expressie;
 background_color: 'background-color:' expressie;
 width: 'width:' expressie;
 height: 'height:' expressie;
 
-stylerule: (LOWER_IDENT | ID_IDENT | CLASS_IDENT)
-OPEN_BRACE
-(property SEMICOLON)+
-CLOSE_BRACE;
-
 property: color | background_color | width | height;
-variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expressie SEMICOLON;
-
-
 
 expressie: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
 
 vermenigvuldiging: element (MUL element)*;
 
 element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expressie ')';
+
+if_statement:
+IF BOX_BRACKET_OPEN (TRUE | FALSE | CAPITAL_IDENT) BOX_BRACKET_CLOSE OPEN_BRACE
+    (property SEMICOLON)*
+    (if_statement)*
+CLOSE_BRACE (else_statement)*;
+
+else_statement:
+ELSE OPEN_BRACE
+    (property SEMICOLON)*
+    (if_statement)*
+CLOSE_BRACE;
 
