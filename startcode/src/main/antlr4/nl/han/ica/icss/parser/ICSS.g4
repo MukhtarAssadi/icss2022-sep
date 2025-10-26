@@ -50,20 +50,20 @@ OPEN_BRACE
     (property SEMICOLON | if_statement)*
 CLOSE_BRACE;
 
-variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expressie SEMICOLON;
+variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression;
 
-color: 'color:' expressie;
-background_color: 'background-color:' expressie;
-width: 'width:' expressie;
-height: 'height:' expressie;
+color: 'color:' expression;
+background_color: 'background-color:' expression;
+width: 'width:' expression;
+height: 'height:' expression;
 
 property: color | background_color | width | height;
 
-expressie: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
+expression: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
 
 vermenigvuldiging: element (MUL element)*;
 
-element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expressie ')';
+element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expression ')';
 
 if_statement:
 IF BOX_BRACKET_OPEN (TRUE | FALSE | CAPITAL_IDENT) BOX_BRACKET_CLOSE OPEN_BRACE
