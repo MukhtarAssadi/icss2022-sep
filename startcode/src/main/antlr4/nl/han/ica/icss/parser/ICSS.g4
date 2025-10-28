@@ -1,79 +1,79 @@
-grammar ICSS;
+    grammar ICSS;
 
-//--- LEXER: ---
+    //--- LEXER: ---
 
-// IF support:
-IF: 'if';
-ELSE: 'else';
-BOX_BRACKET_OPEN: '[';
-BOX_BRACKET_CLOSE: ']';
-
-
-//Literals
-TRUE: 'TRUE';
-FALSE: 'FALSE';
-PIXELSIZE: [0-9]+ 'px';
-PERCENTAGE: [0-9]+ '%';
-SCALAR: [0-9]+;
+    // IF support:
+    IF: 'if';
+    ELSE: 'else';
+    BOX_BRACKET_OPEN: '[';
+    BOX_BRACKET_CLOSE: ']';
 
 
-//Color value takes precedence over id idents
-COLOR: '#' [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f];
+    //Literals
+    TRUE: 'TRUE';
+    FALSE: 'FALSE';
+    PIXELSIZE: [0-9]+ 'px';
+    PERCENTAGE: [0-9]+ '%';
+    SCALAR: [0-9]+;
 
-//Specific identifiers for id's and css classes
-ID_IDENT: '#' [a-z0-9\-]+;
-CLASS_IDENT: '.' [a-z0-9\-]+;
 
-//General identifiers
-LOWER_IDENT: [a-z] [a-z0-9\-]*;
-CAPITAL_IDENT: [A-Z] [A-Za-z0-9_]*;
+    //Color value takes precedence over id idents
+    COLOR: '#' [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f] [0-9a-f];
 
-//All whitespace is skipped
-WS: [ \t\r\n]+ -> skip;
+    //Specific identifiers for id's and css classes
+    ID_IDENT: '#' [a-z0-9\-]+;
+    CLASS_IDENT: '.' [a-z0-9\-]+;
 
-//
-OPEN_BRACE: '{';
-CLOSE_BRACE: '}';
-SEMICOLON: ';';
-COLON: ':';
-PLUS: '+';
-MIN: '-';
-MUL: '*';
-ASSIGNMENT_OPERATOR: ':=';
-//--- PARSER: ---
-stylesheet: (statement)*;
-statement: stylerule | variable_assignment;
+    //General identifiers
+    LOWER_IDENT: [a-z] [a-z0-9\-]*;
+    CAPITAL_IDENT: [A-Z] [A-Za-z0-9_]*;
 
-stylerule:
-(LOWER_IDENT | ID_IDENT | CLASS_IDENT)
-OPEN_BRACE
-    (property SEMICOLON | if_statement)*
-CLOSE_BRACE;
+    //All whitespace is skipped
+    WS: [ \t\r\n]+ -> skip;
 
-variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression;
+    //
+    OPEN_BRACE: '{';
+    CLOSE_BRACE: '}';
+    SEMICOLON: ';';
+    COLON: ':';
+    PLUS: '+';
+    MIN: '-';
+    MUL: '*';
+    ASSIGNMENT_OPERATOR: ':=';
+    //--- PARSER: ---
+    stylesheet: (statement)*;
+    statement: stylerule | variable_assignment;
 
-color: 'color:' expression;
-background_color: 'background-color:' expression;
-width: 'width:' expression;
-height: 'height:' expression;
+    stylerule:
+    (LOWER_IDENT | ID_IDENT | CLASS_IDENT)
+    OPEN_BRACE
+        (property SEMICOLON | if_statement)*
+    CLOSE_BRACE;
 
-property: color | background_color | width | height;
+    variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression;
 
-expression: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
+    color: 'color:' expression;
+    background_color: 'background-color:' expression;
+    width: 'width:' expression;
+    height: 'height:' expression;
 
-vermenigvuldiging: element (MUL element)*;
+    property: color | background_color | width | height;
 
-element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expression ')';
+    expression: vermenigvuldiging ((PLUS | MIN) vermenigvuldiging)*;
 
-if_statement:
-IF BOX_BRACKET_OPEN (TRUE | FALSE | CAPITAL_IDENT) BOX_BRACKET_CLOSE OPEN_BRACE
-    (property SEMICOLON)*
-    (if_statement)*
-CLOSE_BRACE (else_statement)*;
+    vermenigvuldiging: element (MUL element)*;
 
-else_statement:
-ELSE OPEN_BRACE
-    (property SEMICOLON)*
-    (if_statement)*
-CLOSE_BRACE;
+    element: PIXELSIZE | PERCENTAGE | CAPITAL_IDENT | COLOR | TRUE | FALSE | SCALAR | '(' expression ')';
+
+    if_statement:
+    IF BOX_BRACKET_OPEN (TRUE | FALSE | CAPITAL_IDENT) BOX_BRACKET_CLOSE OPEN_BRACE
+        (property SEMICOLON)*
+        (if_statement)*
+    CLOSE_BRACE (else_statement)*;
+
+    else_statement:
+    ELSE OPEN_BRACE
+        (property SEMICOLON)*
+        (if_statement)*
+    CLOSE_BRACE;
 

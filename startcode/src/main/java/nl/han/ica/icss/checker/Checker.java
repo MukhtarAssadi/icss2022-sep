@@ -32,11 +32,6 @@ import java.util.HashMap;
 // variableTypes stack global	zorgt ervoor dat de scope per block in scope blijft
 
 
-
-
-
-
-
 public class Checker {
 
     private IHANLinkedList<HashMap<String, ExpressionType>> variableTypes = new HANLinkedList<>();
