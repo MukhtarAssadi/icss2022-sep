@@ -15,6 +15,9 @@ import nl.han.ica.icss.ast.Operation;
 import nl.han.ica.icss.ast.IfClause;
 import nl.han.ica.icss.ast.ElseClause;
 import nl.han.ica.icss.ast.literals.*;
+import nl.han.ica.icss.ast.operations.AddOperation;
+import nl.han.ica.icss.ast.operations.MultiplyOperation;
+import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.HashMap;
@@ -135,20 +138,23 @@ public class Checker {
         variableTypes.addFirst(new HashMap<>());
         for (ASTNode child : node.body) {
             if (child instanceof Declaration) {
-            checkPropertyDeclaration((Declaration) child);
+                checkPropertyDeclaration((Declaration) child);
             } else if (child instanceof VariableAssignment) {
-            checkVariableAssignment((VariableAssignment) child);
+                checkVariableAssignment((VariableAssignment) child);
             } else if (child instanceof IfClause) {
-            checkIfStatement((IfClause) child);
-         }
-            variableTypes.removeFirst();
+                checkIfStatement((IfClause) child);
+            }
+        }
+        variableTypes.removeFirst();
+
 
             if (node.elseClause != null) {
                 checkElseStatement(node.elseClause);
             }
+
+
     }
 
-}
     private void checkElseStatement(ElseClause node) {
         variableTypes.addFirst(new HashMap<>());
         for (ASTNode child : node.getChildren()) {
@@ -159,6 +165,50 @@ public class Checker {
             }
         }
         variableTypes.removeFirst();
+    }
+
+
+    private ExpressionType checkVariableReference(VariableReference node) {
+        for (int i = 0; i < variableTypes.getSize(); i++) {
+            HashMap<String, ExpressionType> scope = variableTypes.get(i);
+            if (scope.containsKey(node.name)) {
+                return scope.get(node.name);
+            }
+        }
+        node.setError("Undefined variable: " + node.name);
+        return ExpressionType.UNDEFINED;
+    }
+
+
+    private ExpressionType checkOperation(Operation op) {
+        ExpressionType left = checkExpression(op.lhs);
+        ExpressionType right = checkExpression(op.rhs);
+
+        if (left == ExpressionType.UNDEFINED || right == ExpressionType.UNDEFINED)
+            return ExpressionType.UNDEFINED;
+
+        if (op instanceof AddOperation || op instanceof SubtractOperation) {
+            if (left == right && left != ExpressionType.COLOR) {
+                return left;
+            }
+            op.setError("Operations of plus or minus must have same type.");
+            return ExpressionType.UNDEFINED;
+        }
+
+        if (op instanceof MultiplyOperation) {
+            boolean leftScalar = left == ExpressionType.SCALAR;
+            boolean rightScalar = right == ExpressionType.SCALAR;
+            boolean involvesColor = (left == ExpressionType.COLOR || right == ExpressionType.COLOR);
+
+            if (!involvesColor && (leftScalar || rightScalar)) {
+                return leftScalar ? right : left;
+            }
+            op.setError("Operations of multiplication must include one scalar and no colors.");
+            return ExpressionType.UNDEFINED;
+        }
+
+        op.setError("Unsupported operation type.");
+        return ExpressionType.UNDEFINED;
     }
 
 }
