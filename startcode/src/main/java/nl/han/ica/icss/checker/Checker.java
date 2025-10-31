@@ -82,7 +82,7 @@ public class Checker {
         }
 
         node.setError("Unknown expression type");
-        return null;
+        return ExpressionType.UNDEFINED;
     }
 
     private void checkStylerule(Stylerule node) {

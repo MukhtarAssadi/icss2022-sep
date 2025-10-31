@@ -1,29 +1,29 @@
 package nl.han.ica.datastructures;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HANStack<T> implements IHANStack<T> {
 
-    private LinkedList<T> stack;
+    private List<T> stack;
 
-    public HANStack() {
-        stack = new LinkedList<>();
+    public HANStack() {stack = new ArrayList<>();
     }
 
     @Override
     public void push(T value) {
-        stack.addFirst(value);
+        stack.add(value);
     }
 
     @Override
     public T pop() {
         if (stack.isEmpty()) {return null;}
-        return stack.removeFirst();
+        return stack.remove(stack.size() - 1);
     }
 
     @Override
     public T peek() {
         if (stack.isEmpty()) {return null;}
-        return stack.getFirst();
+        return stack.get(stack.size() - 1);
     }
 }

@@ -50,7 +50,7 @@
         (property SEMICOLON | if_statement)*
     CLOSE_BRACE;
 
-    variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression;
+    variable_assignment: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON;
 
     color: 'color:' expression;
     background_color: 'background-color:' expression;
