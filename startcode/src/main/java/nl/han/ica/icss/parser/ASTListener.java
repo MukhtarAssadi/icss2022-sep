@@ -13,7 +13,7 @@ public class ASTListener extends ICSSBaseListener {
 
 	private final AST ast = new AST();
 	private final IHANStack<ASTNode> currentContainer = new HANStack<>();
-	private final IHANStack<Expression> expressionStack = new HANStack<>();
+	private final IHANStack<Expression> expressionStack = new HANStack<>(); //apparte stack voor expressions zodat ik ze apart kan afhandelen.
 
 	public ASTListener() {
 		currentContainer.push(ast.root);
@@ -106,24 +106,12 @@ public class ASTListener extends ICSSBaseListener {
 		else if (ctx.CAPITAL_IDENT() != null) expr = new VariableReference(ctx.CAPITAL_IDENT().getText());
 
 		if (expr != null)
-//			currentContainer.peek().addChild(expr);
 			expressionStack.push(expr);
 	}
 
 	@Override
 	public void exitExpression(ICSSParser.ExpressionContext ctx) {
 		if (ctx.vermenigvuldiging().size() > 1) {
-//			Expression rhs = (Expression) currentContainer.pop();
-//			Expression lhs = (Expression) currentContainer.pop();
-//
-//			Operation op;
-//			if (ctx.PLUS().size() > 0)
-//				op = new AddOperation(lhs, rhs);
-//			else
-//				op = new SubtractOperation(lhs, rhs);
-//
-//			currentContainer.peek().addChild(op);
-//			currentContainer.push(op);
 			for (int i = 1; i < ctx.vermenigvuldiging().size(); i++) {
 				Expression rhs = expressionStack.pop();
 				Expression lhs = expressionStack.pop();
@@ -159,11 +147,6 @@ public class ASTListener extends ICSSBaseListener {
 			Expression lhs = expressionStack.pop();
 			Expression result = new MultiplyOperation(lhs, rhs);
 			expressionStack.push(result);
-//			Expression rhs = (Expression) currentContainer.pop();
-//			Expression lhs = (Expression) currentContainer.pop();
-//			Operation op = new MultiplyOperation(lhs, rhs);
-//			currentContainer.peek().addChild(op);
-//			currentContainer.push(op);
 		}
 	}
 

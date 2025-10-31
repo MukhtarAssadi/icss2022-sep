@@ -22,16 +22,6 @@ import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.HashMap;
 
-
-// to do
-// Voeg IHANLinkedList toe aan checkVariableAssignment
-// bepaal het type expressie in checkExpression (recursief)
-// zorg dat checkProperty kijkt of het de juiste property heeft (color moet een kleur zijn, geen width)
-// zorg dat checkIfStatement en Else alleen een boolean kan hebben als conditional
-// zorg dat checkStylerule de linked lists maakt voor de scopes van variabelen
-// variableTypes stack global	zorgt ervoor dat de scope per block in scope blijft
-
-
 public class Checker {
 
     private IHANLinkedList<HashMap<String, ExpressionType>> variableTypes = new HANLinkedList<>();
