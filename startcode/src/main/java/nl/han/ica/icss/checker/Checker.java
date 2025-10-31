@@ -21,6 +21,7 @@ import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class Checker {
 
@@ -77,15 +78,7 @@ public class Checker {
 
     private void checkStylerule(Stylerule node) {
         variableTypes.addFirst(new HashMap<>());
-        for (ASTNode child : node.getChildren()) {
-            if (child instanceof Declaration) {
-                checkPropertyDeclaration((Declaration) child);
-            } else if (child instanceof IfClause) {
-                checkIfStatement((IfClause) child);
-            } else if (child instanceof VariableAssignment) {
-                checkVariableAssignment((VariableAssignment) child);
-            }
-        }
+        checkBody(node.getChildren());
         variableTypes.removeFirst();
     }
 
@@ -121,15 +114,7 @@ public class Checker {
         }
 
         variableTypes.addFirst(new HashMap<>());
-        for (ASTNode child : node.body) {
-            if (child instanceof Declaration) {
-                checkPropertyDeclaration((Declaration) child);
-            } else if (child instanceof VariableAssignment) {
-                checkVariableAssignment((VariableAssignment) child);
-            } else if (child instanceof IfClause) {
-                checkIfStatement((IfClause) child);
-            }
-        }
+        checkBody(node.getChildren());
         variableTypes.removeFirst();
 
 
@@ -142,13 +127,7 @@ public class Checker {
 
     private void checkElseStatement(ElseClause node) {
         variableTypes.addFirst(new HashMap<>());
-        for (ASTNode child : node.getChildren()) {
-            if (child instanceof Declaration) {
-                checkPropertyDeclaration((Declaration) child);
-            } else if (child instanceof IfClause) {
-                checkIfStatement((IfClause) child);
-            }
-        }
+        checkBody(node.getChildren());
         variableTypes.removeFirst();
     }
 
@@ -194,6 +173,14 @@ public class Checker {
 
         op.setError("Unsupported operation type.");
         return ExpressionType.UNDEFINED;
+    }
+
+    private void checkBody(List<ASTNode> nodes) {
+        for (ASTNode child : nodes) {
+            if (child instanceof Declaration) checkPropertyDeclaration((Declaration) child);
+            else if (child instanceof VariableAssignment) checkVariableAssignment((VariableAssignment) child);
+            else if (child instanceof IfClause) checkIfStatement((IfClause) child);
+        }
     }
 
 }

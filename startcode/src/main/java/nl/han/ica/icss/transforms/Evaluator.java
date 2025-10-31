@@ -22,10 +22,6 @@ public class Evaluator implements Transform {
         variableValues.addFirst(new HashMap<>());
         evaluateStylesheet(ast.root);
         ast.root.body.removeIf(node -> node instanceof VariableAssignment);
-
-        System.out.println("=== AFTER EVALUATION ===");
-        System.out.println(ast.root);
-
         variableValues.removeFirst();
     }
 
@@ -36,12 +32,6 @@ public class Evaluator implements Transform {
             else if (child instanceof Stylerule)
                 evaluateStylerule((Stylerule) child);
         }
-    }
-
-    private void evaluateVariableAssignment(VariableAssignment node) {
-        Literal value = evaluateExpression(node.expression);
-        if (value != null)
-            variableValues.getFirst().put(node.name.name, value);
     }
 
     private void evaluateStylerule(Stylerule rule) {
@@ -59,6 +49,12 @@ public class Evaluator implements Transform {
         }
 
         variableValues.removeFirst();
+    }
+
+    private void evaluateVariableAssignment(VariableAssignment node) {
+        Literal value = evaluateExpression(node.expression);
+        if (value != null)
+            variableValues.getFirst().put(node.name.name, value);
     }
 
     private void evaluateIfClause(Stylerule parent, IfClause node) {

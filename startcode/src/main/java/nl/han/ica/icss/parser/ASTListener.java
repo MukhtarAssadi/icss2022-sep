@@ -109,6 +109,9 @@ public class ASTListener extends ICSSBaseListener {
 			expressionStack.push(expr);
 	}
 
+
+	//bouwt expressie omgekeerd op
+	//combineert vermenigvuldigingen en optellen
 	@Override
 	public void exitExpression(ICSSParser.ExpressionContext ctx) {
 		if (ctx.vermenigvuldiging().size() > 1) {
