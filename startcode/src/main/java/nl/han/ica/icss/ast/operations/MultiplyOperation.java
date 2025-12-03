@@ -5,6 +5,10 @@ import nl.han.ica.icss.ast.Operation;
 
 public class MultiplyOperation extends Operation {
 
+    public MultiplyOperation() {
+
+    }
+
     @Override
     public String getNodeLabel() {
         return "Multiply";
